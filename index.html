@@ -107,32 +107,6 @@
         @media (max-width: 768px) {
             .a4-paper { width: 100%; padding: 15px; min-height: auto; }
         }
-
-        /* Toast Notification */
-        #toast {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 8px;
-            padding: 16px;
-            position: fixed;
-            z-index: 100;
-            left: 50%;
-            bottom: 30px;
-            transform: translateX(-50%);
-            font-size: 14px;
-            opacity: 0;
-            transition: opacity 0.5s, bottom 0.5s;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
-        #toast.error { background-color: #ef4444; }
-        #toast.success { background-color: #10b981; }
-        #toast.warning { background-color: #f59e0b; }
-
-        .hidden-step { display: none; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 md:p-8">
@@ -157,8 +131,8 @@
                 </div>
                 
                 <nav class="space-y-6">
-                    <div class="group flex items-start space-x-4 cursor-pointer" id="nav-step-1" onclick="if(!this.classList.contains('opacity-50')) showStep(1)">
-                        <div id="badge-step-1" class="flex-shrink-0 w-8 h-8 rounded-full border-2 border-blue-400 bg-blue-500 text-white flex items-center justify-center font-bold text-sm shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all">1</div>
+                    <div class="group flex items-start space-x-4" id="ind-step-1">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full border-2 border-blue-400 bg-blue-500 text-white flex items-center justify-center font-bold text-sm shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all">1</div>
                         <div class="pt-1">
                             <span class="block font-semibold text-sm text-white group-hover:text-blue-200 transition-colors">Input Data</span>
                             <span class="block text-xs text-slate-400 mt-1">อัปโหลดข้อมูลดิบ</span>
@@ -167,8 +141,8 @@
                     
                     <div class="h-8 border-l-2 border-white/10 ml-4"></div>
                     
-                    <div class="group flex items-start space-x-4 opacity-50 transition-opacity duration-300" id="nav-step-2">
-                        <div id="badge-step-2" class="flex-shrink-0 w-8 h-8 rounded-full border-2 border-slate-600 bg-transparent text-slate-400 flex items-center justify-center font-bold text-sm">2</div>
+                    <div class="group flex items-start space-x-4 opacity-50 transition-opacity duration-300" id="ind-step-2">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full border-2 border-slate-600 bg-transparent text-slate-400 flex items-center justify-center font-bold text-sm">2</div>
                         <div class="pt-1">
                             <span class="block font-semibold text-sm text-slate-300">Preview & Export</span>
                             <span class="block text-xs text-slate-500 mt-1">ตรวจสอบและส่งออก</span>
@@ -178,7 +152,7 @@
             </div>
             
             <div class="relative z-10">
-                <p class="text-[10px] text-slate-500 text-center tracking-widest uppercase">Powered by Junejoonnsm</p>
+                <p class="text-[10px] text-slate-500 mt-6 text-center tracking-widest uppercase">Powered by Junejoonnsm</p>
             </div>
         </div>
 
@@ -199,7 +173,7 @@
             <div class="flex-1 overflow-y-auto custom-scrollbar relative p-8">
                 
                 <!-- STEP 1: INPUT -->
-                <div id="step-1-content" class="max-w-4xl mx-auto step-content transition-all duration-500 ease-out">
+                <div id="step-1" class="max-w-4xl mx-auto step-content transition-all duration-500 ease-out transform">
                     <div class="text-center mb-10">
                         <h3 class="text-2xl font-bold text-slate-800 mb-3 font-display">เตรียมข้อมูลการประชุม</h3>
                         <p class="text-slate-500 text-sm max-w-lg mx-auto">ระบบ AI จะช่วยวิเคราะห์เสียงและรูปภาพ เพื่อสร้างรายงานการประชุมที่สมบูรณ์แบบในไม่กี่นาที</p>
@@ -210,4 +184,340 @@
                         <div class="space-y-4">
                             <div class="flex items-center justify-between">
                                 <label class="text-sm font-semibold text-slate-700">
-                                    <i class="fa-regular fa-note-sticky mr-1 text-blue-500"></i
+                                    <i class="fa-regular fa-note-sticky mr-1 text-blue-500"></i> บันทึกย่อ (Notes)
+                                </label>
+                                <span class="text-xs text-slate-400">Optional</span>
+                            </div>
+                            <div class="relative group">
+                                <textarea id="input-notes" rows="12" class="w-full p-5 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none resize-none transition-all text-sm text-slate-600 leading-relaxed shadow-sm group-hover:shadow-md placeholder:text-slate-300" placeholder="พิมพ์หัวข้อสำคัญ หรือวางบันทึกย่อๆ ที่นี่..."></textarea>
+                                <div class="absolute bottom-4 right-4 text-slate-300">
+                                    <i class="fa-solid fa-pen-nib"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Upload Section -->
+                        <div class="space-y-6">
+                            <!-- Audio -->
+                            <div>
+                                <label class="text-sm font-semibold text-slate-700 mb-3 block">
+                                    <i class="fa-solid fa-microphone mr-1 text-pink-500"></i> ไฟล์เสียง
+                                </label>
+                                <div id="drop-audio" class="drop-zone border-slate-300 rounded-2xl p-8 text-center cursor-pointer bg-white group hover:shadow-lg relative overflow-hidden">
+                                    <input type="file" id="file-audio" accept="audio/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                    
+                                    <div class="bg-pink-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                        <i class="fa-solid fa-wave-square text-2xl text-pink-500"></i>
+                                    </div>
+                                    <h4 class="text-slate-700 font-medium text-sm mb-1 group-hover:text-pink-600 transition-colors" id="audio-filename">คลิกเพื่ออัปโหลดเสียง</h4>
+                                    <p class="text-xs text-slate-400">รองรับ MP3, WAV, M4A</p>
+                                </div>
+                            </div>
+
+                            <!-- Image -->
+                            <div>
+                                <label class="text-sm font-semibold text-slate-700 mb-3 block">
+                                    <i class="fa-regular fa-image mr-1 text-indigo-500"></i> รูปภาพประกอบ
+                                </label>
+                                <div id="drop-image" class="drop-zone border-slate-300 rounded-2xl p-8 text-center cursor-pointer bg-white group hover:shadow-lg relative overflow-hidden">
+                                    <input type="file" id="file-image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                    
+                                    <div class="bg-indigo-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                        <i class="fa-regular fa-images text-2xl text-indigo-500"></i>
+                                    </div>
+                                    <h4 class="text-slate-700 font-medium text-sm mb-1 group-hover:text-indigo-600 transition-colors" id="image-filename">คลิกเพื่ออัปโหลดรูปภาพ</h4>
+                                    <p class="text-xs text-slate-400">JPG, PNG (ใช้ประกอบการวิเคราะห์)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 flex justify-center">
+                        <button onclick="generateSummary()" id="btn-generate" class="group bg-slate-900 hover:bg-blue-600 text-white pl-8 pr-2 py-2 rounded-full font-semibold shadow-xl shadow-slate-200 transition-all duration-300 flex items-center gap-4 hover:-translate-y-1">
+                            <span class="text-sm tracking-wide">เริ่มสร้างรายงาน</span>
+                            <div class="bg-white/20 rounded-full w-10 h-10 flex items-center justify-center group-hover:bg-white group-hover:text-blue-600 transition-colors">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LOADING STATE -->
+                <div id="loading-state" class="hidden absolute inset-0 bg-white/80 z-20 flex flex-col items-center justify-center text-center p-8 backdrop-blur-md">
+                    <div class="relative">
+                        <div class="w-24 h-24 border-4 border-slate-100 rounded-full"></div>
+                        <div class="w-24 h-24 border-4 border-blue-600 rounded-full border-t-transparent animate-spin absolute top-0 left-0"></div>
+                        <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                            <i class="fa-solid fa-brain text-blue-600 text-2xl animate-pulse"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mt-8 mb-2 font-display">AI กำลังวิเคราะห์ข้อมูล...</h3>
+                    <p class="text-slate-500 text-sm font-medium animate-pulse">กำลังถอดรหัสเสียงและเรียบเรียงเนื้อหา</p>
+                </div>
+
+                <!-- STEP 2: PREVIEW & EXPORT -->
+                <div id="step-2" class="step-content hidden transition-all duration-500 h-full flex flex-col">
+                    
+                    <!-- Toolbar -->
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 sticky top-0 z-10 gap-4">
+                        <!-- Left: Edit & Hint -->
+                        <div class="flex items-center gap-3 w-full md:w-auto">
+                            <button onclick="backToStep1()" class="text-slate-500 hover:text-slate-800 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-lg hover:bg-slate-50 transition-colors">
+                                <i class="fa-solid fa-chevron-left mr-1"></i> แก้ไขข้อมูล
+                            </button>
+                            <span class="hidden md:inline-block text-xs text-blue-500 bg-blue-50 px-3 py-1 rounded-full font-medium">
+                                <i class="fa-solid fa-pen mr-1"></i> คลิกที่กระดาษเพื่อแก้ไข
+                            </span>
+                        </div>
+                        
+                        <!-- Right: Actions -->
+                        <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+                            <button onclick="exportWord()" class="bg-white border border-slate-200 text-blue-700 hover:bg-blue-50 hover:border-blue-200 px-4 py-2 rounded-xl text-xs font-bold shadow-sm flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-file-word text-lg"></i> <span class="hidden sm:inline">Word</span>
+                            </button>
+                            
+                            <div class="w-px h-8 bg-slate-200 mx-2 hidden md:block"></div>
+                            
+                            <!-- Email Section -->
+                            <div class="flex items-center gap-2 bg-slate-100 rounded-xl px-3 py-1 w-full md:w-auto">
+                                <i class="fa-regular fa-envelope text-slate-400"></i>
+                                <input type="text" id="recipient-email" class="bg-transparent border-none text-xs w-full md:w-48 py-2 focus:ring-0 text-slate-600 placeholder:text-slate-400" placeholder="ระบุอีเมล (คั่นด้วย ,)">
+                                <button onclick="sendEmail()" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-lg shadow-green-200 transition-all hover:scale-105 whitespace-nowrap">
+                                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                                    <span class="text-xs font-bold">ส่ง</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PREVIEW AREA (Background) -->
+                    <div class="flex-1 flex justify-center bg-slate-200/50 p-8 rounded-3xl overflow-y-auto border border-slate-200/60 shadow-inner custom-scrollbar relative">
+                        <!-- The Paper -->
+                        <div id="report-preview" class="a4-paper transform transition-transform origin-top" contenteditable="true">
+                            <!-- Content injected by JS -->
+                            <div class="flex flex-col items-center justify-center h-full text-slate-300">
+                                <i class="fa-regular fa-file-lines text-6xl mb-4"></i>
+                                <p>Document Preview</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUCCESS OVERLAY -->
+                <div id="success-state" class="hidden absolute inset-0 bg-white/95 z-30 flex flex-col items-center justify-center text-center p-8 backdrop-blur-sm">
+                    <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-6 shadow-xl shadow-green-100 ring-8 ring-green-50/50">
+                        <i class="fa-solid fa-check text-4xl text-green-500"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2 font-display">ส่งอีเมลเรียบร้อย!</h2>
+                    <p class="text-slate-500 mb-8 max-w-xs mx-auto">รายงานการประชุมถูกส่งไปยังผู้รับ และบันทึกเข้าระบบแล้ว</p>
+                    <button onclick="location.reload()" class="px-8 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-medium shadow-lg transition-all hover:-translate-y-1">ทำรายการใหม่</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // WEBHOOK URL
+        const WEBHOOK_GENERATE_URL = 'https://junensm.app.n8n.cloud/webhook-test/generate-summary'; 
+        const WEBHOOK_SEND_URL = 'https://hooks.payso.one/webhook/send-email-final';
+
+        // --- UI Interactions ---
+        // เพิ่มพารามิเตอร์ maxSizeMB (หน่วยเป็น MB)
+        function setupFileInput(id, labelId, maxSizeMB = null) {
+            const el = document.getElementById(id);
+            const dropZone = el.closest('.drop-zone');
+            
+            el.addEventListener('change', function(e) {
+                if(this.files.length) {
+                    const file = this.files[0];
+
+                    // ตรวจสอบขนาดไฟล์ (ถ้ามีการกำหนด limit)
+                    if (maxSizeMB && file.size > maxSizeMB * 1024 * 1024) {
+                        alert(`⚠️ ขออภัยครับ ไฟล์ "${file.name}" มีขนาดใหญ่เกินไป\n\nกรุณาเลือกไฟล์ที่มีขนาดไม่เกิน ${maxSizeMB} MB`);
+                        this.value = ''; // ล้างค่าไฟล์ที่เลือกออก
+                        return; // จบการทำงาน ไม่ไปต่อ
+                    }
+
+                    const fileName = file.name;
+                    document.getElementById(labelId).innerText = fileName;
+                    document.getElementById(labelId).classList.add('text-blue-600');
+                    dropZone.classList.add('active', 'border-blue-500');
+                    
+                    // Add checkmark icon
+                    const icon = dropZone.querySelector('i');
+                    icon.className = 'fa-solid fa-circle-check text-2xl text-green-500 mb-2 transition-all duration-500 ease-out transform scale-110';
+                }
+            });
+        }
+        
+        // เรียกใช้ฟังก์ชัน พร้อมกำหนดขนาดไฟล์เสียงไม่เกิน 20 MB
+        setupFileInput('file-audio', 'audio-filename', 20); 
+        setupFileInput('file-image', 'image-filename'); // รูปภาพไม่ได้กำหนด (หรือจะกำหนดก็ได้)
+
+        function updateStepper(step) {
+            const step1 = document.getElementById('ind-step-1');
+            const step2 = document.getElementById('ind-step-2');
+            const title = document.getElementById('page-title');
+
+            if(step === 2) {
+                // Step 1 Complete style
+                step1.querySelector('div').className = "flex-shrink-0 w-8 h-8 rounded-full border-2 border-green-500 bg-green-500 text-white flex items-center justify-center font-bold text-sm transition-all";
+                step1.querySelector('div').innerHTML = '<i class="fa-solid fa-check"></i>';
+                
+                // Step 2 Active style
+                step2.classList.remove('opacity-50');
+                step2.querySelector('div').className = "flex-shrink-0 w-8 h-8 rounded-full border-2 border-blue-400 bg-blue-500 text-white flex items-center justify-center font-bold text-sm shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all";
+                
+                title.innerText = "Review Report";
+            } else {
+                // Reset
+                location.reload(); // Simplest reset for now
+            }
+        }
+
+        // --- Core Logic ---
+        async function generateSummary() {
+            const notes = document.getElementById('input-notes').value;
+            const audio = document.getElementById('file-audio').files[0];
+            const image = document.getElementById('file-image').files[0];
+            // กำหนดค่า Default เป็น full_mom โดยอัตโนมัติ เพราะเอา UI ออกแล้ว
+            const reportType = 'full_mom';
+
+            if(!notes && !audio && !image) return alert('กรุณาใส่ข้อมูลสักอย่าง (ข้อความ/เสียง/รูป)');
+
+            document.getElementById('step-1').classList.add('hidden', 'opacity-0');
+            document.getElementById('step-1').classList.remove('opacity-100');
+            
+            document.getElementById('loading-state').classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('notes', notes);
+            formData.append('report_type', reportType);
+            if(audio) formData.append('audio_file', audio);
+            if(image) formData.append('image_file', image);
+
+            try {
+                const res = await fetch(WEBHOOK_GENERATE_URL, { method: 'POST', body: formData });
+                if(!res.ok) throw new Error(`Server error: ${res.status}`);
+                
+                // Try reading response as text first to handle empty/malformed JSON gracefully
+                const text = await res.text();
+                
+                let data;
+                try {
+                    // Check if response is empty
+                    if (!text) {
+                        throw new Error("Empty response received from server");
+                    }
+                    data = JSON.parse(text);
+                } catch (e) {
+                    console.warn("Could not parse JSON, falling back to raw text", e);
+                    // Create a fallback object structure if plain text is returned
+                    data = {
+                        summary: text,
+                        html_content: null
+                    };
+                }
+                
+                const content = data.html_content || formatTextToHTML(data.summary);
+                
+                document.getElementById('report-preview').innerHTML = content;
+
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('step-2').classList.remove('hidden');
+                updateStepper(2);
+
+            } catch (err) {
+                console.error(err);
+                alert(`เกิดข้อผิดพลาด: ${err.message}`);
+                backToStep1();
+            }
+        }
+
+        function formatTextToHTML(text) {
+            if(!text) return "";
+            let html = text
+                .replace(/^# (.*$)/gim, '<h1 class="mom-title">$1</h1>')
+                .replace(/^## (.*$)/gim, '<h2 class="mom-section-title">$1</h2>')
+                .replace(/^### (.*$)/gim, '<h3 class="mom-section-title">$1</h3>')
+                .replace(/^\- (.*$)/gim, '<li class="mom-list"><li>$1</li></li>') // Basic list fix
+                .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>')
+                .replace(/\n/gim, '<br>');
+            return html;
+        }
+
+        function exportWord() {
+            // Get content from the preview div
+            const content = document.getElementById('report-preview').innerHTML;
+            
+            // Define styles to be injected into the Word document
+            // Note: Inline styles in HTML usually work best for html-docx-js, but we add a style block for robustness
+            const css = `
+                <style>
+                    body { font-family: 'Sarabun', sans-serif; font-size: 14px; line-height: 1.5; color: #333; }
+                    .mom-title { font-size: 24px; font-weight: bold; color: #1e293b; margin-bottom: 10px; }
+                    .mom-date { font-size: 14px; font-weight: bold; color: #64748b; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+                    .mom-section-title { font-size: 16px; font-weight: bold; color: #0f172a; margin-top: 20px; margin-bottom: 10px; }
+                    ul { list-style-type: disc; margin-left: 20px; }
+                    li { margin-bottom: 5px; }
+                    p { margin-bottom: 10px; }
+                </style>
+            `;
+            
+            // Wrap content in a full HTML structure with charset
+            const htmlString = `<!DOCTYPE html><html><head><meta charset="UTF-8">${css}</head><body>${content}</body></html>`;
+            
+            // Convert to Docx Blob
+            // Using html-docx.js global variable 'htmlDocx'
+            const converted = htmlDocx.asBlob(htmlString, {
+                orientation: 'portrait',
+                margins: { top: 720, right: 720, bottom: 720, left: 720 } // Twips (1/1440 inch) -> approx 0.5 inch margins
+            });
+            
+            // Save file
+            saveAs(converted, 'MOM_Report.docx');
+        }
+
+        async function sendEmail() {
+            const email = document.getElementById('recipient-email').value;
+            if(!email) return alert('กรุณาระบุอีเมล');
+
+            const btn = document.querySelector('button[onclick="sendEmail()"]');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('final_summary', document.getElementById('report-preview').innerHTML);
+            formData.append('email', email);
+            formData.append('subject', 'MOM Report: ' + new Date().toLocaleDateString('th-TH'));
+
+            try {
+                await fetch(WEBHOOK_SEND_URL, { method: 'POST', body: formData, mode: 'no-cors' });
+                document.getElementById('step-2').classList.add('hidden');
+                document.getElementById('success-state').classList.remove('hidden');
+            } catch (err) {
+                alert('ส่งไม่สำเร็จ: ' + err.message);
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        }
+
+        function backToStep1() {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-1').classList.remove('hidden', 'opacity-0');
+            document.getElementById('step-1').classList.add('opacity-100');
+            
+            // Reset Stepper Visuals (manual reversal)
+            const step1 = document.getElementById('ind-step-1');
+            const step2 = document.getElementById('ind-step-2');
+            step2.classList.add('opacity-50');
+            step2.querySelector('div').className = "flex-shrink-0 w-8 h-8 rounded-full border-2 border-slate-600 bg-transparent text-slate-400 flex items-center justify-center font-bold text-sm";
+            step1.querySelector('div').className = "flex-shrink-0 w-8 h-8 rounded-full border-2 border-blue-400 bg-blue-500 text-white flex items-center justify-center font-bold text-sm shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all";
+            step1.querySelector('div').innerHTML = '1';
+        }
+    </script>
+</body>
+</html>
