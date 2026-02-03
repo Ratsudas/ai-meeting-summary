@@ -3,53 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Meeting Assistant</title>
-    <!-- Tailwind CSS for styling -->
+    <title>AI Meeting Assistant (Real AI)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Inter & Sarabun -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
-        body {
-            font-family: 'Sarabun', 'Inter', sans-serif;
-            background-color: #F3F4F6;
-        }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .drop-zone {
-            transition: all 0.3s ease;
-            border-style: dashed;
-        }
-        .drop-zone.active {
-            border-color: #4F46E5;
-            background-color: #EEF2FF;
-        }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
-        }
+        body { font-family: 'Sarabun', 'Inter', sans-serif; background-color: #F3F4F6; }
+        .drop-zone { transition: all 0.3s ease; border-style: dashed; }
+        .drop-zone.active { border-color: #4F46E5; background-color: #EEF2FF; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-blue-100">
 
     <div class="max-w-4xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden grid md:grid-cols-5 min-h-[600px]">
         
-        <!-- Sidebar / Progress -->
+        <!-- Sidebar -->
         <div class="md:col-span-2 bg-slate-900 text-white p-8 flex flex-col justify-between relative overflow-hidden">
             <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-indigo-600 rounded-full opacity-20 blur-3xl"></div>
             <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-blue-500 rounded-full opacity-20 blur-3xl"></div>
@@ -65,320 +38,230 @@
                 <div class="space-y-6">
                     <div class="step-indicator flex items-center space-x-4 text-indigo-200" id="ind-step-1">
                         <div class="w-8 h-8 rounded-full border-2 border-indigo-500 bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">1</div>
-                        <span class="font-medium text-white">Input Data</span>
+                        <span class="font-medium text-white">Input & Analyze</span>
                     </div>
                     <div class="h-8 border-l-2 border-slate-700 ml-4"></div>
                     
                     <div class="step-indicator flex items-center space-x-4 text-slate-500" id="ind-step-2">
                         <div class="w-8 h-8 rounded-full border-2 border-slate-600 flex items-center justify-center font-bold text-sm">2</div>
-                        <span class="font-medium">Review AI Draft</span>
-                    </div>
-                    <div class="h-8 border-l-2 border-slate-700 ml-4"></div>
-
-                    <div class="step-indicator flex items-center space-x-4 text-slate-500" id="ind-step-3">
-                        <div class="w-8 h-8 rounded-full border-2 border-slate-600 flex items-center justify-center font-bold text-sm">3</div>
-                        <span class="font-medium">Send Email</span>
+                        <span class="font-medium">Review & Send</span>
                     </div>
                 </div>
             </div>
-
             <div class="relative z-10 text-sm text-slate-400 mt-10">
-                <p>Powered by <span class="text-indigo-400 font-semibold">n8n Workflow</span></p>
+                <p>Powered by <span class="text-indigo-400 font-semibold">n8n + OpenAI</span></p>
             </div>
         </div>
 
-        <!-- Main Content Area -->
+        <!-- Main Content -->
         <div class="md:col-span-3 p-8 bg-white relative">
             
             <!-- STEP 1: INPUT -->
             <div id="step-1" class="step-content transition-all duration-300">
                 <h2 class="text-2xl font-bold text-slate-800 mb-2">ข้อมูลการประชุม</h2>
-                <p class="text-slate-500 mb-6 text-sm">อัปโหลดไฟล์เสียง รูปภาพ หรือบันทึกข้อความเพื่อเริ่มการสรุป</p>
+                <p class="text-slate-500 mb-6 text-sm">ระบบจะส่งข้อมูลนี้ไปให้ AI บน n8n วิเคราะห์และสรุปให้ก่อน</p>
 
                 <div class="space-y-4">
-                    <!-- Text Area -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">บันทึกย่อ / Note</label>
-                        <textarea id="input-notes" rows="3" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none transition" placeholder="พิมพ์หัวข้อหลักๆ หรือวางเนื้อหาที่นี่..."></textarea>
+                        <textarea id="input-notes" rows="3" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none resize-none transition" placeholder="พิมพ์เนื้อหาที่ต้องการสรุป..."></textarea>
                     </div>
-
-                    <!-- Audio Upload -->
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">ไฟล์เสียง (Audio)</label>
-                        <div id="drop-audio" class="drop-zone border-2 border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:bg-slate-50 relative group">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">ไฟล์เสียง (Audio) <span class="text-xs text-slate-400">(ส่งไปถอดความ)</span></label>
+                        <div id="drop-audio" class="drop-zone border-2 border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:bg-slate-50 relative">
                             <input type="file" id="file-audio" accept="audio/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            <i class="fa-solid fa-microphone-lines text-2xl text-slate-400 mb-2 group-hover:text-indigo-500 transition"></i>
-                            <p class="text-xs text-slate-500" id="audio-filename">Click or Drag audio file here</p>
+                            <i class="fa-solid fa-microphone-lines text-xl text-slate-400 mb-1"></i>
+                            <p class="text-xs text-slate-500" id="audio-filename">เลือกไฟล์เสียง</p>
                         </div>
                     </div>
-
-                    <!-- Image Upload -->
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">ภาพประกอบ (Images)</label>
-                        <div id="drop-image" class="drop-zone border-2 border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:bg-slate-50 relative group">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">ภาพประกอบ <span class="text-xs text-slate-400">(ส่งไปวิเคราะห์)</span></label>
+                        <div id="drop-image" class="drop-zone border-2 border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:bg-slate-50 relative">
                             <input type="file" id="file-image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            <i class="fa-regular fa-image text-2xl text-slate-400 mb-2 group-hover:text-pink-500 transition"></i>
-                            <p class="text-xs text-slate-500" id="image-filename">Click or Drag image here</p>
+                            <i class="fa-regular fa-image text-xl text-slate-400 mb-1"></i>
+                            <p class="text-xs text-slate-500" id="image-filename">เลือกรูปภาพ</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-8">
-                    <button onclick="processToStep2()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-indigo-200 transition-all flex justify-center items-center gap-2">
-                        <span>Generate AI Summary</span>
+                <div class="mt-6">
+                    <button onclick="generateSummary()" id="btn-generate" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-indigo-200 transition-all flex justify-center items-center gap-2">
+                        <span>ส่งให้ AI สรุป (Generate)</span>
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- LOADING OVERLAY -->
-            <div id="loading-state" class="hidden absolute inset-0 bg-white z-20 flex flex-col items-center justify-center">
-                <div class="relative w-20 h-20 mb-4">
+            <!-- LOADING STATE -->
+            <div id="loading-state" class="hidden absolute inset-0 bg-white z-20 flex flex-col items-center justify-center text-center p-8">
+                <div class="relative w-16 h-16 mb-4">
                     <div class="absolute top-0 left-0 w-full h-full border-4 border-indigo-100 rounded-full"></div>
                     <div class="absolute top-0 left-0 w-full h-full border-4 border-indigo-600 rounded-full border-t-transparent animate-spin"></div>
-                    <i class="fa-solid fa-brain absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-indigo-600 text-xl"></i>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-800 animate-pulse">AI กำลังวิเคราะห์ข้อมูล...</h3>
-                <p class="text-slate-500 text-sm mt-2">กำลังถอดเสียงและสรุปประเด็นสำคัญ</p>
+                <h3 class="text-lg font-semibold text-slate-800">AI กำลังทำงาน...</h3>
+                <p class="text-slate-500 text-sm mt-2" id="loading-text">กำลังส่งข้อมูลไปที่ n8n และรอผลลัพธ์จาก OpenAI</p>
             </div>
 
-            <!-- STEP 2: REVIEW & SEND -->
+            <!-- STEP 2: REVIEW & EMAIL -->
             <div id="step-2" class="step-content hidden transition-all duration-300 h-full flex flex-col">
                 <div class="flex justify-between items-center mb-2">
-                    <h2 class="text-xl font-bold text-slate-800">ตรวจสอบสรุป</h2>
-                    <button onclick="backToStep1()" class="text-slate-400 hover:text-slate-600 text-sm"><i class="fa-solid fa-arrow-left mr-1"></i> แก้ไขข้อมูล</button>
+                    <h2 class="text-xl font-bold text-slate-800">ตรวจสอบและส่งเมล</h2>
+                    <button onclick="backToStep1()" class="text-slate-400 hover:text-slate-600 text-sm"><i class="fa-solid fa-arrow-left mr-1"></i> กลับไปแก้ไข input</button>
                 </div>
 
-                <!-- AI Output Area -->
                 <div class="flex-grow mb-4 relative group h-48">
                     <label class="absolute top-2 right-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded font-bold pointer-events-none">
-                        <i class="fa-solid fa-check-circle mr-1"></i>AI Generated
+                        <i class="fa-solid fa-check-circle mr-1"></i>จาก n8n
                     </label>
-                    <textarea id="ai-summary-text" class="w-full h-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none resize-none text-slate-700 leading-relaxed text-sm" placeholder="AI Result will appear here..."></textarea>
+                    <textarea id="ai-summary-text" class="w-full h-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none resize-none text-slate-700 text-sm" placeholder="รอผลลัพธ์จาก AI..."></textarea>
                 </div>
 
-                <!-- Email Subject -->
-                <div class="mb-3">
-                    <label class="block text-sm font-medium text-slate-700 mb-1">หัวข้ออีเมล (Subject)</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fa-solid fa-heading text-slate-400"></i>
-                        </div>
-                        <input type="text" id="email-subject" class="w-full pl-10 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm font-semibold text-slate-700" placeholder="สรุปการประชุม...">
+                <div class="space-y-3 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">หัวข้ออีเมล</label>
+                        <input type="text" id="email-subject" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm" placeholder="สรุปการประชุม...">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">ส่งถึงอีเมล (ระบุได้หลายคน)</label>
+                        <input type="text" id="recipient-email" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm" placeholder="a@test.com, b@test.com">
                     </div>
                 </div>
 
-                <!-- Email Input (Multi) -->
-                <div class="mb-4">
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="block text-sm font-medium text-slate-700">ผู้รับอีเมล (Recipients)</label>
-                        <span class="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded">คั่นด้วยคอมมา (,) เพื่อส่งหลายคน</span>
-                    </div>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fa-regular fa-envelope text-slate-400"></i>
-                        </div>
-                        <input type="text" id="recipient-email" class="w-full pl-10 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm" placeholder="boss@company.com, team@company.com">
-                    </div>
-                </div>
-
-                <button onclick="submitWebhook()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-green-200 transition-all flex justify-center items-center gap-2">
-                    <span>Confirm & Send Email</span>
+                <button onclick="sendEmail()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-green-200 transition-all flex justify-center items-center gap-2">
+                    <span>ยืนยันและส่งเมล (Send Email)</span>
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
 
-            <!-- SUCCESS STATE -->
+            <!-- SUCCESS -->
             <div id="success-state" class="hidden h-full flex flex-col items-center justify-center text-center">
                 <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
                     <i class="fa-solid fa-check text-4xl text-green-600"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-slate-800 mb-2">ส่งข้อมูลสำเร็จ!</h2>
-                <p class="text-slate-500 mb-8 max-w-xs mx-auto">ระบบ n8n ได้รับข้อมูลเรียบร้อยแล้ว และกำลังดำเนินการส่งอีเมลไปยังผู้รับทั้งหมด</p>
-                <button onclick="location.reload()" class="px-6 py-2 bg-white border border-slate-300 text-slate-600 rounded-lg hover:bg-slate-50 transition">
-                    ทำรายการใหม่
-                </button>
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">เรียบร้อย!</h2>
+                <p class="text-slate-500 mb-6">ระบบส่งคำสั่งไปที่ n8n เพื่อส่งอีเมลแล้ว</p>
+                <button onclick="location.reload()" class="px-6 py-2 border rounded-lg hover:bg-slate-50">เริ่มใหม่</button>
             </div>
 
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Webhook URL Configuration
-        const WEBHOOK_URL = 'https://hooks.payso.one/webhook-test/send-meeting-email';
+        // ==========================================
+        // ⚙️ ตั้งค่า URL ของ n8n ตรงนี้ (มี 2 อัน)
+        // ==========================================
+        
+        // 1. ลิงก์สำหรับให้ AI สรุป (Workflow 1)
+        const WEBHOOK_GENERATE_URL = 'https://hooks.payso.one/webhook-test/generate-summary'; 
+        
+        // 2. ลิงก์สำหรับส่งอีเมลจริง (Workflow 2)
+        const WEBHOOK_SEND_URL = 'https://hooks.payso.one/webhook-test/send-email-final';
 
-        // File Input Handler Logic
+        // ==========================================
+
         function setupFileInput(id, labelId) {
-            const input = document.getElementById(id);
-            const label = document.getElementById(labelId);
-            const wrapper = input.parentElement;
-
-            input.addEventListener('change', (e) => {
-                if(input.files.length > 0) {
-                    label.innerText = input.files[0].name;
-                    label.classList.add('text-indigo-600', 'font-semibold');
-                    wrapper.classList.add('border-indigo-500', 'bg-indigo-50');
+            document.getElementById(id).addEventListener('change', function(e) {
+                if(this.files.length) {
+                    document.getElementById(labelId).innerText = this.files[0].name;
+                    this.parentElement.classList.add('border-indigo-500', 'bg-indigo-50');
                 }
             });
         }
         setupFileInput('file-audio', 'audio-filename');
         setupFileInput('file-image', 'image-filename');
 
-        // Navigation & State Logic
         function updateStepper(step) {
-            const steps = [1, 2, 3];
-            steps.forEach(s => {
-                const el = document.getElementById(`ind-step-${s}`);
-                const circle = el.querySelector('div');
-                const text = el.querySelector('span');
-
-                if (s === step) {
-                    // Active
-                    circle.className = "w-8 h-8 rounded-full border-2 border-indigo-500 bg-indigo-600 text-white flex items-center justify-center font-bold text-sm transition-all";
-                    text.classList.add('text-white');
-                    text.classList.remove('text-slate-500');
-                } else if (s < step) {
-                    // Completed
-                    circle.className = "w-8 h-8 rounded-full border-2 border-green-500 bg-green-500 text-white flex items-center justify-center font-bold text-sm transition-all";
-                    circle.innerHTML = '<i class="fa-solid fa-check"></i>';
-                    text.classList.remove('text-white');
-                    text.classList.add('text-indigo-200');
-                } else {
-                    // Pending
-                    circle.className = "w-8 h-8 rounded-full border-2 border-slate-600 flex items-center justify-center font-bold text-sm text-slate-400 transition-all";
-                    circle.innerHTML = s;
-                    text.classList.remove('text-white');
-                    text.classList.add('text-slate-500');
-                }
-            });
+            const s1 = document.getElementById('ind-step-1').querySelector('div');
+            const s2 = document.getElementById('ind-step-2').querySelector('div');
+            
+            if(step === 2) {
+                s1.className = "w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-sm";
+                s1.innerHTML = '<i class="fa-solid fa-check"></i>';
+                s2.className = "w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm";
+            } else if (step === 3) {
+                s2.className = "w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-sm";
+                s2.innerHTML = '<i class="fa-solid fa-check"></i>';
+            }
         }
 
-        // STEP 1 -> STEP 2 (Simulate AI)
-        function processToStep2() {
-            // Validate inputs if needed
+        // STEP 1: เรียก n8n เพื่อขอสรุป (Generate Summary)
+        async function generateSummary() {
             const notes = document.getElementById('input-notes').value;
+            const audio = document.getElementById('file-audio').files[0];
+            const image = document.getElementById('file-image').files[0];
+
+            if(!notes && !audio && !image) return alert('กรุณาใส่ข้อมูลสักอย่าง (ข้อความ/เสียง/รูป)');
 
             document.getElementById('step-1').classList.add('hidden');
             document.getElementById('loading-state').classList.remove('hidden');
 
-            // SIMULATE AI GENERATION DELAY (2 Seconds)
-            setTimeout(() => {
-                const mockSummary = generateMockSummary(notes);
-                document.getElementById('ai-summary-text').value = mockSummary;
+            const formData = new FormData();
+            formData.append('notes', notes);
+            if(audio) formData.append('audio_file', audio);
+            if(image) formData.append('image_file', image);
+
+            try {
+                // ยิงไป Webhook 1
+                const res = await fetch(WEBHOOK_GENERATE_URL, { method: 'POST', body: formData });
                 
-                // Auto-generate Subject
+                if(!res.ok) throw new Error('Network response was not ok');
+                
+                const data = await res.json(); // คาดหวัง JSON กลับมา: { "summary": "..." }
+                
+                document.getElementById('ai-summary-text').value = data.summary || data.text || JSON.stringify(data);
+                
+                // Auto Subject
                 const today = new Date().toLocaleDateString('th-TH');
                 document.getElementById('email-subject').value = `สรุปการประชุมประจำวันที่ ${today}`;
 
                 document.getElementById('loading-state').classList.add('hidden');
                 document.getElementById('step-2').classList.remove('hidden');
                 updateStepper(2);
-            }, 2000);
-        }
 
-        function backToStep1() {
-            document.getElementById('step-2').classList.add('hidden');
-            document.getElementById('step-1').classList.remove('hidden');
-            updateStepper(1);
-        }
-
-        function generateMockSummary(originalNotes) {
-            const today = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
-            
-            let base = `📅 **วันที่:** ${today}\n`;
-            base += `📢 **หัวข้อการประชุม:** การวางแผนกลยุทธ์และการดำเนินงานประจำไตรมาส (Q2 Strategy & Operations)\n\n`;
-            
-            if (originalNotes.length > 5) {
-                base += `📝 **จากบันทึกของคุณ:**\n"${originalNotes}"\n\n`;
+            } catch (err) {
+                console.error(err);
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อกับ AI: ' + err.message);
+                backToStep1();
             }
-
-            base += `📊 **สรุปเนื้อหาสำคัญ (Executive Summary):**\n`;
-            base += `- ที่ประชุมได้หารือเรื่องทิศทางการดำเนินงานในไตรมาสถัดไป โดยเน้นการเพิ่มประสิทธิภาพของทีมขายและการขยายตลาดในช่องทางออนไลน์\n`;
-            base += `- มีการอนุมัติงบประมาณเพิ่มเติมสำหรับการทำการตลาดผ่าน Social Media จำนวน 200,000 บาท\n`;
-            base += `- ทีม IT รายงานปัญหาเรื่อง Server Load ในช่วง Peak time และเสนอแนวทางแก้ไขด้วยการขยาย Cloud Storage ซึ่งที่ประชุมเห็นชอบในหลักการ\n\n`;
-
-            base += `🚀 **สิ่งที่ต้องทำต่อ (Action Items):**\n`;
-            base += `1. **[คุณสมชาย]** จัดทำแผนงบประมาณฉบับแก้ไขและส่งให้ฝ่ายบัญชีภายในวันศุกร์นี้\n`;
-            base += `2. **[ทีม IT]** ดำเนินการติดต่อ Vendor เพื่อขอใบเสนอราคา Cloud Server ใหม่\n`;
-            base += `3. **[ทีม Marketing]** นัด Brainstorming แคมเปญใหม่ในวันพุธหน้า เวลา 14:00 น.\n\n`;
-            
-            base += `💡 **หมายเหตุ:** การประชุมครั้งถัดไปนัดหมายในอีก 2 สัปดาห์ข้างหน้า`;
-
-            return base;
         }
 
-        // STEP 2 -> SUBMIT TO N8N
-        async function submitWebhook() {
+        // STEP 2: เรียก n8n เพื่อส่งอีเมล (Send Email)
+        async function sendEmail() {
             const email = document.getElementById('recipient-email').value;
-            const subject = document.getElementById('email-subject').value;
-            
-            if (!email) {
-                alert('กรุณาระบุอีเมลผู้รับอย่างน้อย 1 คน');
-                return;
-            }
+            if(!email) return alert('กรุณาระบุอีเมล');
 
-            const btn = document.querySelector('button[onclick="submitWebhook()"]');
-            const originalBtnText = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+            const btn = document.querySelector('button[onclick="sendEmail()"]');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังส่ง...';
             btn.disabled = true;
 
             const formData = new FormData();
-            formData.append('notes', document.getElementById('input-notes').value);
-            formData.append('ai_summary', document.getElementById('ai-summary-text').value);
+            formData.append('final_summary', document.getElementById('ai-summary-text').value);
             formData.append('email', email);
-            formData.append('subject', subject);
+            formData.append('subject', document.getElementById('email-subject').value);
             
-            const audioFile = document.getElementById('file-audio').files[0];
-            const imageFile = document.getElementById('file-image').files[0];
-            
-            if(audioFile) formData.append('audio_file', audioFile);
-            if(imageFile) formData.append('image_file', imageFile);
+            // ส่งไฟล์เดิมไปด้วย ถ้าต้องการให้แนบไฟล์ในเมล
+            const audio = document.getElementById('file-audio').files[0];
+            if(audio) formData.append('audio_file', audio);
 
             try {
-                // Attempt 1: Standard Fetch (Good for getting response)
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    showSuccess();
-                } else {
-                    throw new Error('Server returned ' + response.status);
-                }
-            } catch (error) {
-                console.warn('Standard fetch failed (likely CORS), retrying with no-cors...', error);
+                // ยิงไป Webhook 2
+                await fetch(WEBHOOK_SEND_URL, { method: 'POST', body: formData, mode: 'no-cors' });
                 
-                try {
-                    // Attempt 2: No-CORS Fetch (Fire and forget, browser won't report detailed errors)
-                    await fetch(WEBHOOK_URL, {
-                        method: 'POST',
-                        body: formData,
-                        mode: 'no-cors'
-                    });
-                    
-                    // If we get here in no-cors mode, it means the request was sent (Opaque).
-                    // We assume success for the UX flow.
-                    console.log('No-cors request sent.');
-                    showSuccess();
-                    
-                } catch (innerError) {
-                    console.error('All fetch attempts failed:', innerError);
-                    alert('ไม่สามารถส่งข้อมูลได้จริง (Network/Blocker Error) แต่จะแสดงหน้าสำเร็จเพื่อทดสอบ UI');
-                    // Force success for demo purposes if everything fails
-                    showSuccess();
-                }
-            } finally {
-                btn.innerHTML = originalBtnText;
+                // ใช้ no-cors เพื่อความชัวร์ในการส่ง (fire and forget)
+                updateStepper(3);
+                document.getElementById('step-2').classList.add('hidden');
+                document.getElementById('success-state').classList.remove('hidden');
+            } catch (err) {
+                alert('ส่งไม่สำเร็จ: ' + err.message);
                 btn.disabled = false;
+                btn.innerHTML = 'ลองใหม่';
             }
         }
 
-        function showSuccess() {
-            updateStepper(3);
+        function backToStep1() {
+            document.getElementById('loading-state').classList.add('hidden');
             document.getElementById('step-2').classList.add('hidden');
-            document.getElementById('success-state').classList.remove('hidden');
+            document.getElementById('step-1').classList.remove('hidden');
         }
     </script>
 </body>
